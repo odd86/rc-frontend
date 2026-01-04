@@ -1,19 +1,25 @@
 <template>
   <MobileShell>
-    <div class="space-y-4">
+    <div class="ds-page">
       <FunCard
-          :eyebrow="t('dashboard.titleEyebrow')"
-          :title="t('dashboard.title')"
-          :subtitle="t('dashboard.subtitle')"
-          badge="🚀"
+        :eyebrow="t('dashboard.titleEyebrow')"
+        :title="t('dashboard.title')"
+        :subtitle="t('dashboard.subtitle')"
+        badge="🚀"
       >
         <div class="grid grid-cols-2 gap-3">
-          <button class="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white">
-            {{ t("dashboard.startJob") }}
-          </button>
-          <button class="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-800">
-            {{ t("dashboard.seeJobs") }}
-          </button>
+          <RouterLink
+            to="/jobs"
+            class="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white text-center hover:bg-slate-800"
+          >
+            🧲 {{ t('dashboard.startJob') }}
+          </RouterLink>
+          <RouterLink
+            to="/vehicles"
+            class="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-800 text-center hover:bg-slate-200"
+          >
+            🚙 {{ t('dashboard.seeJobs') }}
+          </RouterLink>
         </div>
       </FunCard>
     </div>

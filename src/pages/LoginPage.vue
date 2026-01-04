@@ -2,32 +2,37 @@
   <div class="min-h-screen bg-slate-50">
     <div class="mx-auto flex min-h-screen max-w-md items-center px-4">
       <div class="w-full rounded-3xl border bg-white p-6 shadow-sm">
-        <h1 class="text-xl font-semibold text-slate-900">{{ t("auth.appName") }}</h1>
-        <p class="mt-1 text-sm text-slate-600">{{ t("auth.tagline") }}</p>
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <h1 class="truncate text-xl font-semibold text-slate-900">🧰 {{ t("auth.appName") }}</h1>
+            <p class="mt-1 text-sm text-slate-600">{{ t("auth.tagline") }}</p>
+          </div>
+          <div class="shrink-0 rounded-2xl bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">🔐</div>
+        </div>
 
         <div class="mt-6 flex gap-2">
           <button
               class="flex-1 rounded-2xl px-3 py-2 text-sm font-semibold"
-              :class="mode === 'login' ? 'bg-slate-900 text-white' : 'border bg-white text-slate-800'"
+              :class="mode === 'login' ? 'bg-slate-900 text-white' : 'border bg-white text-slate-800 hover:bg-slate-50'"
               @click="mode = 'login'"
               type="button"
           >
-            {{ t("auth.login") }}
+            🔑 {{ t("auth.login") }}
           </button>
 
           <button
               class="flex-1 rounded-2xl px-3 py-2 text-sm font-semibold"
-              :class="mode === 'register' ? 'bg-slate-900 text-white' : 'border bg-white text-slate-800'"
+              :class="mode === 'register' ? 'bg-slate-900 text-white' : 'border bg-white text-slate-800 hover:bg-slate-50'"
               @click="mode = 'register'"
               type="button"
           >
-            {{ t("auth.register") }}
+            ✨ {{ t("auth.register") }}
           </button>
         </div>
 
         <form class="mt-6 space-y-4" @submit.prevent="submit">
           <div>
-            <label class="text-sm text-slate-600">{{ t("auth.username") }}</label>
+            <label class="text-sm font-semibold text-slate-700">👤 {{ t("auth.username") }}</label>
             <input
                 v-model="username"
                 class="mt-1 w-full rounded-2xl border px-3 py-2"
@@ -36,7 +41,7 @@
           </div>
 
           <div>
-            <label class="text-sm text-slate-600">{{ t("auth.password") }}</label>
+            <label class="text-sm font-semibold text-slate-700">🔒 {{ t("auth.password") }}</label>
             <input
                 v-model="password"
                 class="mt-1 w-full rounded-2xl border px-3 py-2"
@@ -53,7 +58,7 @@
             {{ loading ? t("auth.working") : mode === "login" ? t("auth.loginCta") : t("auth.registerCta") }}
           </button>
 
-          <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+          <p v-if="error" class="rounded-2xl border bg-red-50 px-3 py-2 text-sm text-red-700">⚠️ {{ error }}</p>
         </form>
 
         <p class="mt-6 text-xs text-slate-500">

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <header class="border-b bg-white">
-      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+      <div class="mx-auto flex max-w-6xl items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="h-9 w-9 rounded-xl bg-gray-900"></div>
           <div>

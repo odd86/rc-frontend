@@ -51,7 +51,8 @@ router.beforeEach(async (to) => {
     const vehicles = useVehiclesStore()
     const me = useMeStore()
 
-    if (!auth.isAuthed) return { name: "login" }
+    // Only guard routes that actually require auth
+    if (to.meta.requiresAuth && !auth.isAuthed) return { name: "login" }
     if (to.name === "login" && auth.isAuthed) return { name: "dashboard" }
 
     // Load me when needed (admin pages)
@@ -65,7 +66,7 @@ router.beforeEach(async (to) => {
     }
 
     // Force vehicle onboarding for non admin area
-    if (!to.path.startsWith("/admin")) {
+    if (!to.path.startsWith("/admin") && to.meta.requiresAuth) {
         if (!vehicles.vehicles.length) await vehicles.fetchVehicles().catch(() => null)
         if (vehicles.needsVehicle && to.name !== "vehicles-add") return { name: "vehicles-add" }
     }
