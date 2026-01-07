@@ -1,49 +1,63 @@
 <template>
   <MobileShell>
     <div class="px-4 pt-4 space-y-4">
-      <FunCard
-          :eyebrow="t('vehicles.add.titleEyebrow')"
-          :title="t('vehicles.add.title')"
-          :subtitle="t('vehicles.add.subtitle')"
-          badge="🚙"
-      >
-        <form class="space-y-4" @submit.prevent="submit">
-          <div>
-            <label class="text-sm font-semibold text-slate-700">{{ t("vehicles.add.vehicleType") }}</label>
-            <p class="mt-1 text-xs text-slate-500">{{ t("vehicles.add.hintType") }}</p>
+      <div class="space-y-3">
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <div class="text-xs font-semibold text-slate-500">{{ t("vehicles.add.titleEyebrow") }}</div>
+            <div class="mt-0.5 truncate text-lg font-semibold text-slate-900">{{ t("vehicles.add.title") }}</div>
+            <div class="mt-0.5 text-sm text-slate-600">{{ t("vehicles.add.subtitle") }}</div>
+          </div>
+          <div class="shrink-0 rounded-2xl bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+            🚙
+          </div>
+        </div>
 
-            <select
+        <div class="rounded-3xl border bg-white p-4">
+          <form class="space-y-4" @submit.prevent="submit">
+            <div>
+              <label class="text-sm font-semibold text-slate-700">{{ t("vehicles.add.vehicleType") }}</label>
+              <p class="mt-1 text-xs text-slate-500">{{ t("vehicles.add.hintType") }}</p>
+
+              <select
                 v-model="vehicleType"
                 class="mt-2 w-full rounded-2xl border bg-white px-3 py-3 text-sm"
-            >
-              <option v-for="opt in vehicleTypeOptions" :key="opt.value" :value="opt.value">
-                {{ opt.label }}
-              </option>
-            </select>
-          </div>
+              >
+                <option v-for="opt in vehicleTypeOptions" :key="opt.value" :value="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+            </div>
 
-          <button
+            <button
               class="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
               :disabled="loading || !vehicleType"
               type="submit"
-          >
-            {{ loading ? t("auth.working") : t("vehicles.add.create") }}
-          </button>
+            >
+              {{ loading ? t("auth.working") : t("vehicles.add.create") }}
+            </button>
 
-          <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
-        </form>
-      </FunCard>
+            <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+          </form>
+        </div>
+      </div>
 
-      <FunCard
-          eyebrow="Tips"
-          title="Gøy det er lov"
-          subtitle="Velg noe som føles riktig"
-          badge="😄"
-      >
-        <div class="text-sm text-slate-700">
+      <div class="space-y-3">
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <div class="text-xs font-semibold text-slate-500">Tips</div>
+            <div class="mt-0.5 truncate text-lg font-semibold text-slate-900">Gøy det er lov</div>
+            <div class="mt-0.5 text-sm text-slate-600">Velg noe som føles riktig</div>
+          </div>
+          <div class="shrink-0 rounded-2xl bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+            😄
+          </div>
+        </div>
+
+        <div class="rounded-3xl border border-dashed bg-white p-4 text-sm text-slate-700">
           Dette er bare en mal. Senere kan vi legge inn ikon, farge og stats per kjøretøytype.
         </div>
-      </FunCard>
+      </div>
     </div>
   </MobileShell>
 </template>
@@ -54,8 +68,6 @@ import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 
 import MobileShell from "../components/MobileShell.vue"
-import FunCard from "../components/FunCard.vue"
-
 import { useVehiclesStore } from "../stores/vehicles"
 import type { VehicleType } from "../types/api"
 

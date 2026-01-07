@@ -128,11 +128,11 @@
             <div class="mt-1 text-xs text-slate-600">Ta en jobb fra «{{ t("jobs.pendingTitle") }}» når du er klar.</div>
           </div>
 
-          <div v-else class="space-y-3">
+          <div v-else class="rounded-2xl border bg-white divide-y overflow-hidden">
             <div
               v-for="aj in jobsStore.active"
               :key="aj.job_id"
-              class="rounded-2xl border bg-white px-3 py-3"
+              class="px-3 py-3"
             >
               <div class="flex items-start justify-between gap-3">
                 <div class="min-w-0 flex-1">
@@ -185,11 +185,11 @@
             </div>
           </div>
 
-          <div v-else class="space-y-3">
+          <div v-else class="rounded-2xl border bg-white divide-y overflow-hidden">
             <div
               v-for="job in filteredPending"
               :key="job.job_id"
-              class="rounded-2xl border bg-white px-3 py-3"
+              class="px-3 py-3"
             >
               <div class="flex items-start justify-between gap-3">
                 <div class="min-w-0 flex-1">

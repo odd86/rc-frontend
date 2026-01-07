@@ -1,13 +1,19 @@
 <template>
   <MobileShell>
     <div class="px-4 pt-4 space-y-4">
-      <FunCard
-        :eyebrow="t('scoreboard.titleEyebrow')"
-        :title="t('scoreboard.title')"
-        :subtitle="t('scoreboard.subtitle')"
-        badge="🏆"
-      >
-        <div class="space-y-2">
+      <div class="space-y-3">
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <div class="text-xs font-semibold text-slate-500">{{ t("scoreboard.titleEyebrow") }}</div>
+            <div class="mt-0.5 truncate text-lg font-semibold text-slate-900">{{ t("scoreboard.title") }}</div>
+            <div class="mt-0.5 text-sm text-slate-600">{{ t("scoreboard.subtitle") }}</div>
+          </div>
+          <div class="shrink-0 rounded-2xl bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+            🏆
+          </div>
+        </div>
+
+        <div class="rounded-3xl border bg-white p-4 space-y-2">
           <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
             <div class="flex items-center gap-3">
               <div class="text-lg">🥇</div>
@@ -34,7 +40,7 @@
             🧪 {{ t("common.comingSoon") }}
           </div>
         </div>
-      </FunCard>
+      </div>
     </div>
   </MobileShell>
 </template>
@@ -42,7 +48,6 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n"
 import MobileShell from "@/components/MobileShell.vue"
-import FunCard from "@/components/FunCard.vue"
 
 const { t } = useI18n()
 </script>
