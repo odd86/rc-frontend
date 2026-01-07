@@ -1,73 +1,89 @@
 <template>
   <MobileShell>
-    <div class="px-4 pt-4 space-y-4">
-      <div v-if="!vehicle" class="text-sm text-slate-600">⏳ {{ t("auth.working") }}</div>
+    <div class="py-6 section">
+      <!-- Loading state -->
+      <div v-if="!vehicle" class="card p-6 text-center">
+        <div class="body-sm">{{ t("auth.working") }}</div>
+      </div>
 
-      <FunCard
-        v-else
-        :eyebrow="'🚜 ' + t('vehicles.titleEyebrow')"
-        :title="vehicle.name"
-        :subtitle="t(`vehicles.vehicleTypes.${vehicle.vehicle_type}`)"
-        badge="🧰"
-      >
-        <div class="flex items-center justify-between gap-3">
-          <div class="text-[11px] text-slate-500">
-            id: <span class="font-semibold text-slate-700">{{ vehicle.vehicle_id }}</span>
-          </div>
-          <img
-            :src="`/src/assets/icons/vehicles/${vehicle.vehicle_type}.svg`"
-            class="h-10 w-10"
-            alt=""
-          />
-        </div>
-
-        <div class="mt-3 space-y-2 text-sm">
-          <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-3 py-2">
-            <div class="text-slate-600">
-              <span v-if="vehicle.vehicle_units === 'distance'">🛣️ Distanse</span>
-              <span v-else-if="vehicle.vehicle_units === 'time'">⏱️ Timer</span>
-              <span v-else>📦 Enheter</span>
+      <div v-else class="section-compact">
+        <!-- Vehicle header -->
+        <div class="card p-6">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div class="min-w-0 flex-1">
+              <div class="body-sm text-slate-600">{{ t('vehicles.titleEyebrow') }}</div>
+              <h1 class="heading-1 mt-1">{{ vehicle.name }}</h1>
+              <p class="body-sm mt-2">{{ t(`vehicles.vehicleTypes.${vehicle.vehicle_type}`) }}</p>
             </div>
-            <div class="font-semibold text-slate-900">{{ vehicle.total_units ?? 0 }}</div>
+
+            <img
+              :src="`/src/assets/icons/vehicles/${vehicle.vehicle_type}.svg`"
+              class="h-16 w-16 shrink-0"
+              alt=""
+            />
           </div>
 
-          <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-3 py-2">
-            <div class="text-slate-600">✅ {{ t("vehicles.jobs") }}</div>
-            <div class="font-semibold text-slate-900">{{ vehicle.jobs_completed ?? 0 }}</div>
-          </div>
-
-          <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-3 py-2">
-            <div class="text-slate-600">🛠️ {{ t("vehicles.service") }}</div>
-            <div class="font-semibold text-slate-900">{{ vehicle.service_status ?? "OK" }}</div>
+          <div class="body-sm text-slate-500 font-mono">
+            ID: {{ vehicle.vehicle_id }}
           </div>
         </div>
 
-        <div class="mt-4 grid grid-cols-2 gap-3">
-          <button
-            class="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-            @click="rename()"
-            type="button"
-          >
-            ✏️ {{ t("common.rename") ?? "Rename" }}
-          </button>
+        <!-- Stats -->
+        <div>
+          <h2 class="heading-3 mb-3">{{ t('vehicles.stats') }}</h2>
+          <div class="space-y-2">
+            <div class="card p-4 flex items-center justify-between">
+              <div class="body text-slate-600">
+                <span v-if="vehicle.vehicle_units === 'distance'">{{ t('vehicles.distance') }}</span>
+                <span v-else-if="vehicle.vehicle_units === 'time'">{{ t('vehicles.time') }}</span>
+                <span v-else>{{ t('vehicles.units') }}</span>
+              </div>
+              <div class="heading-3">{{ vehicle.total_units ?? 0 }}</div>
+            </div>
 
-          <button
-            class="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-200"
-            @click="service()"
-            type="button"
-          >
-            🛠️ {{ t("vehicles.maintenance") }}
-          </button>
+            <div class="card p-4 flex items-center justify-between">
+              <div class="body text-slate-600">{{ t("vehicles.jobs") }}</div>
+              <div class="heading-3">{{ vehicle.jobs_completed ?? 0 }}</div>
+            </div>
 
-          <button
-            class="col-span-2 rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 hover:bg-red-100"
-            @click="remove()"
-            type="button"
-          >
-            🗑️ {{ t("common.delete") ?? "Delete" }}
-          </button>
+            <div class="card p-4 flex items-center justify-between">
+              <div class="body text-slate-600">{{ t("vehicles.service") }}</div>
+              <div class="heading-3">{{ vehicle.service_status ?? "OK" }}</div>
+            </div>
+          </div>
         </div>
-      </FunCard>
+
+        <!-- Actions -->
+        <div>
+          <h2 class="heading-3 mb-3">{{ t('common.actions') }}</h2>
+          <div class="grid grid-cols-2 gap-3">
+            <button
+              class="btn btn-primary"
+              @click="rename()"
+              type="button"
+            >
+              {{ t("common.rename") ?? "Rename" }}
+            </button>
+
+            <button
+              class="btn btn-secondary"
+              @click="service()"
+              type="button"
+            >
+              {{ t("vehicles.maintenance") }}
+            </button>
+
+            <button
+              class="btn col-span-2"
+              style="background-color: rgb(254 242 242); color: rgb(185 28 28); border-color: rgb(254 226 226);"
+              @click="remove()"
+              type="button"
+            >
+              {{ t("common.delete") ?? "Delete" }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </MobileShell>
 </template>
@@ -77,7 +93,6 @@ import { computed, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import MobileShell from "../components/MobileShell.vue"
-import FunCard from "@/components/FunCard.vue"
 import { useVehiclesStore } from "@/stores/vehicles"
 
 const { t } = useI18n()
@@ -104,10 +119,6 @@ function rename() {
 
 function service() {
   // later: router.push(`/vehicles/${id.value}/service`)
-}
-
-function stats() {
-  // later: router.push(`/vehicles/${id.value}/stats`)
 }
 
 function remove() {

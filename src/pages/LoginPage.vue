@@ -1,67 +1,70 @@
 <template>
   <div class="min-h-screen bg-slate-50">
     <div class="mx-auto flex min-h-screen max-w-md items-center px-4">
-      <div class="w-full rounded-3xl border bg-white p-6 shadow-sm">
-        <div class="flex items-start justify-between gap-3">
-          <div class="min-w-0">
-            <h1 class="truncate text-xl font-semibold text-slate-900">🧰 {{ t("auth.appName") }}</h1>
-            <p class="mt-1 text-sm text-slate-600">{{ t("auth.tagline") }}</p>
-          </div>
-          <div class="shrink-0 rounded-2xl bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">🔐</div>
+      <div class="w-full card p-6">
+        <div class="mb-6">
+          <h1 class="heading-1">{{ t("auth.appName") }}</h1>
+          <p class="body-sm mt-2">{{ t("auth.tagline") }}</p>
         </div>
 
-        <div class="mt-6 flex gap-2">
+        <!-- Mode switcher -->
+        <div class="grid grid-cols-2 gap-2 mb-6">
           <button
-              class="flex-1 rounded-2xl px-3 py-2 text-sm font-semibold"
-              :class="mode === 'login' ? 'bg-slate-900 text-white' : 'border bg-white text-slate-800 hover:bg-slate-50'"
-              @click="mode = 'login'"
-              type="button"
+            class="btn"
+            :class="mode === 'login' ? 'btn-primary' : 'btn-ghost'"
+            @click="mode = 'login'"
+            type="button"
           >
-            🔑 {{ t("auth.login") }}
+            {{ t("auth.login") }}
           </button>
 
           <button
-              class="flex-1 rounded-2xl px-3 py-2 text-sm font-semibold"
-              :class="mode === 'register' ? 'bg-slate-900 text-white' : 'border bg-white text-slate-800 hover:bg-slate-50'"
-              @click="mode = 'register'"
-              type="button"
+            class="btn"
+            :class="mode === 'register' ? 'btn-primary' : 'btn-ghost'"
+            @click="mode = 'register'"
+            type="button"
           >
-            ✨ {{ t("auth.register") }}
+            {{ t("auth.register") }}
           </button>
         </div>
 
-        <form class="mt-6 space-y-4" @submit.prevent="submit">
+        <!-- Login form -->
+        <form class="space-y-4" @submit.prevent="submit">
           <div>
-            <label class="text-sm font-semibold text-slate-700">👤 {{ t("auth.username") }}</label>
+            <label class="body font-semibold block mb-2">{{ t("auth.username") }}</label>
             <input
-                v-model="username"
-                class="mt-1 w-full rounded-2xl border px-3 py-2"
-                autocomplete="username"
+              v-model="username"
+              class="input"
+              autocomplete="username"
+              :placeholder="t('auth.usernamePlaceholder')"
             />
           </div>
 
           <div>
-            <label class="text-sm font-semibold text-slate-700">🔒 {{ t("auth.password") }}</label>
+            <label class="body font-semibold block mb-2">{{ t("auth.password") }}</label>
             <input
-                v-model="password"
-                class="mt-1 w-full rounded-2xl border px-3 py-2"
-                type="password"
-                autocomplete="current-password"
+              v-model="password"
+              class="input"
+              type="password"
+              autocomplete="current-password"
+              :placeholder="t('auth.passwordPlaceholder')"
             />
           </div>
 
           <button
-              class="w-full rounded-2xl bg-slate-900 px-4 py-2 font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
-              :disabled="loading || !username || !password"
-              type="submit"
+            class="btn btn-primary w-full"
+            :disabled="loading || !username || !password"
+            type="submit"
           >
             {{ loading ? t("auth.working") : mode === "login" ? t("auth.loginCta") : t("auth.registerCta") }}
           </button>
 
-          <p v-if="error" class="rounded-2xl border bg-red-50 px-3 py-2 text-sm text-red-700">⚠️ {{ error }}</p>
+          <div v-if="error" class="alert alert-error">
+            {{ error }}
+          </div>
         </form>
 
-        <p class="mt-6 text-xs text-slate-500">
+        <p class="body-sm text-slate-500 mt-6">
           {{ t("auth.apiKeyNote") }}
         </p>
       </div>

@@ -1,40 +1,62 @@
 <template>
   <MobileShell>
-    <div class="px-4 pt-4 space-y-4">
-      <FunCard
-        :eyebrow="t('scoreboard.titleEyebrow')"
-        :title="t('scoreboard.title')"
-        :subtitle="t('scoreboard.subtitle')"
-        badge="🏆"
-      >
-        <div class="space-y-2">
-          <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+    <div class="py-6 section">
+      <!-- Page header -->
+      <div class="mb-6">
+        <h1 class="heading-1">{{ t('scoreboard.title') }}</h1>
+        <p class="body-sm mt-2">{{ t('scoreboard.subtitle') }}</p>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="space-y-2">
+        <!-- Top 3 with medal styling -->
+        <div class="card p-4 bg-gradient-to-r from-amber-50 to-white">
+          <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="text-lg">🥇</div>
+              <div class="text-2xl">🥇</div>
               <div>
-                <div class="text-sm font-semibold text-slate-900">Grus Kongen</div>
-                <div class="text-xs text-slate-600">✨ XP 999</div>
+                <div class="heading-3">Grus Kongen</div>
+                <div class="body-sm text-slate-600">XP 999</div>
               </div>
             </div>
-            <div class="text-sm font-semibold text-slate-900">1</div>
-          </div>
-
-          <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
-            <div class="flex items-center gap-3">
-              <div class="text-lg">🥈</div>
-              <div>
-                <div class="text-sm font-semibold text-slate-900">Towie Master</div>
-                <div class="text-xs text-slate-600">✨ XP 700</div>
-              </div>
-            </div>
-            <div class="text-sm font-semibold text-slate-900">2</div>
-          </div>
-
-          <div class="rounded-2xl border border-dashed p-4 text-sm text-slate-600">
-            🧪 {{ t("common.comingSoon") }}
+            <div class="heading-3 text-slate-900">#1</div>
           </div>
         </div>
-      </FunCard>
+
+        <div class="card p-4 bg-gradient-to-r from-slate-50 to-white">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="text-2xl">🥈</div>
+              <div>
+                <div class="heading-3">Towie Master</div>
+                <div class="body-sm text-slate-600">XP 700</div>
+              </div>
+            </div>
+            <div class="heading-3 text-slate-900">#2</div>
+          </div>
+        </div>
+
+        <div class="card p-4 bg-gradient-to-r from-orange-50 to-white">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="text-2xl">🥉</div>
+              <div>
+                <div class="heading-3">Excavator Pro</div>
+                <div class="body-sm text-slate-600">XP 550</div>
+              </div>
+            </div>
+            <div class="heading-3 text-slate-900">#3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coming soon notice -->
+      <div class="card p-6 mt-6 border-dashed">
+        <div class="heading-3 text-slate-700">{{ t("common.comingSoon") }}</div>
+        <p class="body-sm mt-2 text-slate-600">
+          {{ t("scoreboard.comingSoonHint") }}
+        </p>
+      </div>
     </div>
   </MobileShell>
 </template>
@@ -42,7 +64,6 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n"
 import MobileShell from "@/components/MobileShell.vue"
-import FunCard from "@/components/FunCard.vue"
 
 const { t } = useI18n()
 </script>

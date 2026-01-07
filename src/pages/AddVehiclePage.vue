@@ -1,49 +1,40 @@
 <template>
   <MobileShell>
-    <div class="px-4 pt-4 space-y-4">
-      <FunCard
-          :eyebrow="t('vehicles.add.titleEyebrow')"
-          :title="t('vehicles.add.title')"
-          :subtitle="t('vehicles.add.subtitle')"
-          badge="🚙"
-      >
-        <form class="space-y-4" @submit.prevent="submit">
-          <div>
-            <label class="text-sm font-semibold text-slate-700">{{ t("vehicles.add.vehicleType") }}</label>
-            <p class="mt-1 text-xs text-slate-500">{{ t("vehicles.add.hintType") }}</p>
+    <div class="py-6 section">
+      <!-- Page header -->
+      <div class="mb-6">
+        <h1 class="heading-1">{{ t('vehicles.add.title') }}</h1>
+        <p class="body-sm mt-2">{{ t('vehicles.add.subtitle') }}</p>
+      </div>
 
-            <select
-                v-model="vehicleType"
-                class="mt-2 w-full rounded-2xl border bg-white px-3 py-3 text-sm"
-            >
-              <option v-for="opt in vehicleTypeOptions" :key="opt.value" :value="opt.value">
-                {{ opt.label }}
-              </option>
-            </select>
-          </div>
+      <!-- Form -->
+      <form class="space-y-6" @submit.prevent="submit">
+        <div>
+          <label class="body font-semibold block mb-2">{{ t("vehicles.add.vehicleType") }}</label>
+          <p class="body-sm mb-3">{{ t("vehicles.add.hintType") }}</p>
 
-          <button
-              class="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
-              :disabled="loading || !vehicleType"
-              type="submit"
+          <select
+            v-model="vehicleType"
+            class="input"
           >
-            {{ loading ? t("auth.working") : t("vehicles.add.create") }}
-          </button>
-
-          <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
-        </form>
-      </FunCard>
-
-      <FunCard
-          eyebrow="Tips"
-          title="Gøy det er lov"
-          subtitle="Velg noe som føles riktig"
-          badge="😄"
-      >
-        <div class="text-sm text-slate-700">
-          Dette er bare en mal. Senere kan vi legge inn ikon, farge og stats per kjøretøytype.
+            <option v-for="opt in vehicleTypeOptions" :key="opt.value" :value="opt.value">
+              {{ opt.label }}
+            </option>
+          </select>
         </div>
-      </FunCard>
+
+        <div v-if="error" class="alert alert-error">
+          {{ error }}
+        </div>
+
+        <button
+          class="btn btn-primary w-full"
+          :disabled="loading || !vehicleType"
+          type="submit"
+        >
+          {{ loading ? t("auth.working") : t("vehicles.add.create") }}
+        </button>
+      </form>
     </div>
   </MobileShell>
 </template>
@@ -54,7 +45,6 @@ import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 
 import MobileShell from "../components/MobileShell.vue"
-import FunCard from "../components/FunCard.vue"
 
 import { useVehiclesStore } from "../stores/vehicles"
 import type { VehicleType } from "../types/api"
@@ -118,7 +108,7 @@ async function submit() {
 
     await vehiclesStore.fetchVehicles()
 
-    // Etter create: gå til vehicles siden
+    // After create: go to vehicles page
     router.push("/vehicles")
   } catch (e: any) {
     error.value = e?.response?.data?.detail || e?.message || t("auth.errorGeneric")

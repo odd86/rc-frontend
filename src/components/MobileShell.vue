@@ -1,35 +1,35 @@
 <template>
   <div class="h-full w-full overflow-hidden bg-slate-50 flex flex-col">
-    <header class="fixed top-0 left-0 w-full z-40 border-b bg-white/90 backdrop-blur">
-      <div class="mx-auto flex max-w-xl items-center justify-between px-4 py-3">
-        <div class="min-w-0">
-          <div class="truncate text-sm font-semibold text-slate-900">
+    <header class="fixed top-0 left-0 w-full z-40 border-b border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-xl items-center justify-between px-4 py-4">
+        <div class="min-w-0 flex-1">
+          <div class="truncate text-base font-semibold text-slate-900">
             {{ companyName }}
           </div>
-          <div class="mt-0.5 text-xs text-slate-600">
-            {{ t("topbar.xp") }} {{ xp }}
+          <div class="mt-1 text-xs text-slate-600">
+            XP {{ xp }}
           </div>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-4">
           <div class="text-right">
             <div class="text-xs text-slate-600">{{ t("topbar.balance") }}</div>
-            <div class="text-sm font-semibold text-slate-900">{{ balance }}</div>
+            <div class="text-base font-semibold text-slate-900">{{ balance }}</div>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- Content (this is the only scroller) -->
-    <main class="overflow-y-auto overflow-x-hidden pt-14 pb-16 flex-1">
-      <div class="mx-auto max-w-xl px-2 py-4">
+    <!-- Content area with consistent spacing -->
+    <main class="overflow-y-auto overflow-x-hidden pt-16 pb-20 flex-1">
+      <div class="mx-auto max-w-xl px-4">
         <slot />
       </div>
     </main>
 
-    <!-- Bottom nav (no fixed) -->
-    <nav class="fixed bottom-0 left-0 w-full z-40 border-t bg-white backdrop-blur">
-      <div class="mx-auto grid max-w-xl grid-cols-5 px-2 py-2">
+    <!-- Bottom navigation -->
+    <nav class="fixed bottom-0 left-0 w-full z-40 border-t border-slate-200 bg-white">
+      <div class="mx-auto grid max-w-xl grid-cols-5">
         <TabLink to="/dashboard" labelKey="nav.dashboard" icon="🏠" />
         <TabLink to="/company" labelKey="nav.company" icon="🏢" />
         <TabLink to="/vehicles" labelKey="nav.vehicles" icon="🚙" />
