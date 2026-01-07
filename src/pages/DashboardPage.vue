@@ -1,54 +1,43 @@
 <template>
   <MobileShell>
-    <div class="py-6 section">
-      <!-- Page header -->
-      <div>
-        <h1 class="heading-1">{{ t('dashboard.title') }}</h1>
-        <p class="body-sm mt-2">{{ t('dashboard.subtitle') }}</p>
-      </div>
-
-      <!-- Active jobs section -->
+    <div class="py-6 space-y-6">
+      <!-- Active jobs -->
       <section>
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="heading-3">{{ t('jobs.activeTitle') }}</h2>
-          <RouterLink to="/jobs" class="text-xs font-semibold text-slate-600">
-            {{ t('common.viewAll') }}
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="heading-2">🧰 {{ t('jobs.activeTitle') }}</h2>
+          <RouterLink to="/jobs" class="text-xs font-semibold text-slate-700">
+            {{ t('common.viewAll') }} →
           </RouterLink>
         </div>
 
-        <div v-if="jobsStore.loadingActive" class="card p-6 text-center">
-          <div class="body-sm">{{ t('auth.working') }}</div>
+        <div v-if="jobsStore.loadingActive" class="card p-6 text-center body-sm">
+          {{ t('auth.working') }}
         </div>
 
-        <div v-else-if="jobsStore.active.length === 0" class="card p-6">
-          <div class="heading-3 text-slate-700">{{ t('jobs.activeEmpty') }}</div>
-          <p class="body-sm mt-2">{{ t('jobs.activeEmptyHint') }}</p>
-          <RouterLink to="/jobs" class="btn btn-primary mt-4">
+        <div v-else-if="jobsStore.active.length === 0" class="card p-5">
+          <div class="heading-3">{{ t('jobs.activeEmpty') }}</div>
+          <p class="body-sm mt-2 text-slate-600">{{ t('jobs.activeEmptyHint') }}</p>
+          <RouterLink to="/jobs" class="btn btn-primary mt-4 w-full">
             {{ t('jobs.browseJobs') }}
           </RouterLink>
         </div>
 
         <div v-else class="space-y-3">
           <div
-            v-for="job in jobsStore.active"
+            v-for="job in jobsStore.active.slice(0, 3)"
             :key="job.job_id"
             class="card p-4"
           >
-            <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3">
               <div class="min-w-0 flex-1">
                 <div class="heading-3 truncate">{{ job.title || t('jobs.unknownTitle') }}</div>
-                <p class="body-sm mt-1">{{ job.description || '' }}</p>
+                <p class="body-sm mt-1 text-slate-600">{{ job.description || '' }}</p>
 
-                <div class="flex flex-wrap gap-2 mt-3">
-                  <span class="chip chip-inactive">
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <span class="chip chip-inactive text-[11px]">
                     {{ vehicleName(job.vehicle_id) }}
                   </span>
-                  <span v-if="job.job_units" class="chip chip-inactive">
-                    <span v-if="job.job_units === 'distance'">{{ job.unit_amount }} km</span>
-                    <span v-else-if="job.job_units === 'time'">{{ job.unit_amount }}h</span>
-                    <span v-else>{{ job.unit_amount }}</span>
-                  </span>
-                  <span v-if="typeof job.reward_amount === 'number'" class="chip chip-inactive">
+                  <span v-if="typeof job.reward_amount === 'number'" class="chip chip-inactive text-[11px]">
                     {{ job.reward_amount }} {{ t('common.currency') }}
                   </span>
                 </div>
@@ -60,80 +49,34 @@
                 @click="complete(job.vehicle_id)"
                 type="button"
               >
-                {{ jobsStore.completingVehicleId === job.vehicle_id ? t('auth.working') : t('jobs.complete') }}
+                {{ jobsStore.completingVehicleId === job.vehicle_id ? '...' : t('jobs.complete') }}
               </button>
             </div>
           </div>
+          
+          <RouterLink v-if="jobsStore.active.length > 3" to="/jobs" class="block text-center body-sm text-slate-700 hover:text-slate-900 font-semibold py-2">
+            {{ t('common.viewAll') }} ({{ jobsStore.active.length }})
+          </RouterLink>
         </div>
       </section>
 
-      <!-- Fleet summary -->
+      <!-- Quick stats -->
       <section>
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="heading-3">{{ t('nav.vehicles') }}</h2>
-          <RouterLink to="/vehicles" class="text-xs font-semibold text-slate-600">
-            {{ t('common.viewAll') }}
-          </RouterLink>
-        </div>
+        <h2 class="heading-2 mb-3">📊 {{ t('company.stats') }}</h2>
 
-        <div v-if="vehiclesStore.loading" class="card p-6 text-center">
-          <div class="body-sm">{{ t('auth.working') }}</div>
-        </div>
-
-        <div v-else-if="vehiclesStore.vehicles.length === 0" class="card p-6">
-          <div class="heading-3 text-slate-700">{{ t('vehicles.noVehicles') }}</div>
-          <p class="body-sm mt-2">{{ t('vehicles.noVehiclesHint') }}</p>
-          <RouterLink to="/vehicles/add" class="btn btn-primary mt-4">
-            {{ t('vehicles.addVehicle') }}
-          </RouterLink>
-        </div>
-
-        <div v-else class="grid grid-cols-2 gap-3">
-          <div class="card p-4">
+        <div class="grid grid-cols-3 gap-3">
+          <div class="card p-4 text-center">
             <div class="body-sm text-slate-600">{{ t('vehicles.totalVehicles') }}</div>
             <div class="heading-2 mt-1">{{ vehiclesStore.vehicles.length }}</div>
           </div>
-          <div class="card p-4">
-            <div class="body-sm text-slate-600">{{ t('vehicles.activeJobs') }}</div>
-            <div class="heading-2 mt-1">{{ jobsStore.active.length }}</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Stats -->
-      <section>
-        <h2 class="heading-3 mb-4">{{ t('company.stats') }}</h2>
-
-        <div v-if="companyStore.loading" class="card p-6 text-center">
-          <div class="body-sm">{{ t('auth.working') }}</div>
-        </div>
-
-        <div v-else-if="!companyStore.company" class="card p-6">
-          <div class="body-sm text-slate-600">{{ t('common.noData') }}</div>
-        </div>
-
-        <div v-else class="grid grid-cols-2 gap-3">
-          <div class="card p-4">
+          <div class="card p-4 text-center">
             <div class="body-sm text-slate-600">{{ t('company.jobsCompleted') }}</div>
-            <div class="heading-2 mt-1">{{ companyStore.company.jobs_completed }}</div>
+            <div class="heading-2 mt-1">{{ companyStore.company?.jobs_completed ?? 0 }}</div>
           </div>
-          <div class="card p-4">
-            <div class="body-sm text-slate-600">{{ t('company.totalDistance') }}</div>
-            <div class="heading-2 mt-1">{{ companyStore.company.total_distance }} km</div>
+          <div class="card p-4 text-center">
+            <div class="body-sm text-slate-600">XP</div>
+            <div class="heading-2 mt-1">{{ companyStore.company?.xp ?? 0 }}</div>
           </div>
-        </div>
-      </section>
-
-      <!-- Quick actions -->
-      <section>
-        <h2 class="heading-3 mb-4">{{ t('dashboard.quickActions') }}</h2>
-        <div class="grid grid-cols-2 gap-3">
-          <RouterLink to="/jobs" class="btn btn-primary">
-            {{ t('dashboard.browseJobs') }}
-          </RouterLink>
-          <RouterLink to="/vehicles" class="btn btn-secondary">
-            {{ t('dashboard.manageVehicles') }}
-          </RouterLink>
         </div>
       </section>
     </div>
@@ -166,7 +109,6 @@ async function complete(vehicleId: string) {
 }
 
 onMounted(async () => {
-  // Load all dashboard data
   await Promise.allSettled([
     jobsStore.fetchActive(),
     vehiclesStore.vehicles.length === 0 ? vehiclesStore.fetchVehicles() : Promise.resolve(),

@@ -1,23 +1,23 @@
 <template>
   <MobileShell>
-    <div class="py-6 section">
+    <div class="py-6 space-y-4">
       <!-- Page header -->
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <h1 class="heading-1">{{ t('vehicles.titleEyebrow') }}</h1>
-          <p class="body-sm mt-2">{{ t('vehicles.subtitle') }}</p>
-        </div>
+      <div class="flex items-center justify-between">
+        <h1 class="heading-2">🚙 {{ t('vehicles.title') }}</h1>
+        <RouterLink to="/vehicles/add" class="btn-sm btn-primary">
+          + {{ t('vehicles.addVehicle') }}
+        </RouterLink>
       </div>
 
       <!-- Vehicle list -->
-      <div v-if="vehiclesStore.loading" class="card p-6 text-center">
-        <div class="body-sm">{{ t('auth.working') }}</div>
+      <div v-if="vehiclesStore.loading" class="card p-6 text-center body-sm">
+        {{ t('auth.working') }}
       </div>
 
       <div v-else-if="vehiclesStore.vehicles.length === 0" class="card p-6">
-        <div class="heading-3 text-slate-700">{{ t('vehicles.noVehicles') }}</div>
-        <p class="body-sm mt-2">{{ t('vehicles.noVehiclesHint') }}</p>
-        <RouterLink to="/vehicles/add" class="btn btn-primary mt-4">
+        <div class="heading-3">{{ t('vehicles.noVehicles') }}</div>
+        <p class="body-sm mt-2 text-slate-600">{{ t('vehicles.noVehiclesHint') }}</p>
+        <RouterLink to="/vehicles/add" class="btn btn-primary mt-4 w-full">
           {{ t('vehicles.addVehicle') }}
         </RouterLink>
       </div>
@@ -31,7 +31,7 @@
         >
           <div class="p-4">
             <div class="flex items-center gap-4">
-              <!-- Vehicle icon with status ring -->
+              <!-- Vehicle icon with status -->
               <div class="relative shrink-0">
                 <div
                   class="h-12 w-12 rounded-xl grid place-items-center border-2"
@@ -43,8 +43,6 @@
                     alt=""
                   />
                 </div>
-
-                <!-- Status badge -->
                 <div
                   v-if="status(vehicle).level !== 'ok'"
                   class="absolute -right-1 -top-1 h-5 min-w-5 px-1 rounded-full text-[10px] font-bold grid place-items-center border"
@@ -60,36 +58,25 @@
                   <div class="heading-3 truncate flex-grow">
                     {{ vehicle?.name || "Vehicle" }}
                   </div>
-
-                  <!-- Status pill -->
                   <div
-                    class="chip shrink-0"
+                    class="chip shrink-0 text-[10px]"
                     :class="statusPillClass(vehicle)"
                   >
                     {{ status(vehicle).label }}
                   </div>
                 </div>
 
-                <p class="body-sm mt-1 truncate">
+                <p class="body-sm mt-1 text-slate-600 truncate">
                   {{ t(`vehicles.vehicleTypes.${vehicle?.vehicle_type}`) }}
                 </p>
 
-                <!-- Status hint -->
                 <p v-if="status(vehicle).hint" class="body-sm mt-1" :class="statusHintClass(vehicle)">
                   {{ status(vehicle).hint }}
                 </p>
               </div>
-            </div>
-          </div>
-        </RouterLink>
 
-        <!-- Add vehicle button -->
-        <RouterLink
-          to="/vehicles/add"
-          class="card p-6 text-center block hover:bg-slate-50 transition-colors border-dashed"
-        >
-          <div class="body font-semibold text-slate-700">
-            {{ t("vehicles.addVehicle") }}
+              <div class="shrink-0 text-slate-400">›</div>
+            </div>
           </div>
         </RouterLink>
       </div>
@@ -112,9 +99,6 @@ onMounted(async () => {
   }
 })
 
-/**
- * Status logic
- */
 function status(vehicle: any) {
   const errors = Number(vehicle?.errors_count ?? 0)
   const serviceDue = Boolean(vehicle?.service_due)
