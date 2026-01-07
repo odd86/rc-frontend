@@ -14,7 +14,7 @@
 
             <div class="flex items-center gap-2">
               <button
-                class="rounded-2xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                class="min-h-11 rounded-2xl border bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
                 :disabled="jobsStore.loadingPending || jobsStore.loadingActive"
                 @click="refresh"
                 type="button"
@@ -58,14 +58,14 @@
               <div class="text-xs font-semibold text-slate-700">🎛️ {{ t("jobs.filtersTitle") }}</div>
               <div class="flex items-center gap-2">
                 <button
-                  class="rounded-2xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                  class="min-h-11 rounded-2xl border bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
                   @click="clearFilters"
                   type="button"
                 >
                   👀 Alle
                 </button>
                 <button
-                  class="rounded-2xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                  class="min-h-11 rounded-2xl border bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
                   @click="resetFiltersToGarage"
                   type="button"
                 >

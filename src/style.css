@@ -1,9 +1,16 @@
 @import "tailwindcss";
 
 /* Layout helpers */
-/*.ds-page {*/
-/*    @apply px-4 pt-4 space-y-4;*/
-/*}*/
+.ds-page {
+    --page-x: 1rem;
+    --page-y: 1rem;
+    --page-gap: 1rem;
+    padding: var(--page-y) var(--page-x);
+}
+
+.ds-page > * + * {
+    margin-top: var(--page-gap);
+}
 
 /*!* Surfaces *!*/
 /*.ds-card {*/

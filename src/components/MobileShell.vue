@@ -1,7 +1,10 @@
 <template>
   <div class="h-full w-full overflow-hidden bg-slate-50 flex flex-col">
     <header class="fixed top-0 left-0 w-full z-40 border-b bg-white/90 backdrop-blur">
-      <div class="mx-auto flex max-w-xl items-center justify-between px-4 py-3">
+      <div
+        class="mx-auto flex max-w-xl items-center justify-between ds-page"
+        style="--page-y: 0.75rem; --page-gap: 0;"
+      >
         <div class="min-w-0">
           <div class="truncate text-sm font-semibold text-slate-900">
             {{ companyName }}
@@ -22,14 +25,17 @@
 
     <!-- Content (this is the only scroller) -->
     <main class="overflow-y-auto overflow-x-hidden pt-14 pb-16 flex-1">
-      <div class="mx-auto max-w-xl px-2 py-4">
+      <div class="mx-auto w-full max-w-xl">
         <slot />
       </div>
     </main>
 
     <!-- Bottom nav (no fixed) -->
     <nav class="fixed bottom-0 left-0 w-full z-40 border-t bg-white backdrop-blur">
-      <div class="mx-auto grid max-w-xl grid-cols-5 px-2 py-2">
+      <div
+        class="mx-auto grid max-w-xl grid-cols-5 ds-page"
+        style="--page-y: 0.5rem; --page-gap: 0;"
+      >
         <TabLink to="/dashboard" labelKey="nav.dashboard" icon="🏠" />
         <TabLink to="/company" labelKey="nav.company" icon="🏢" />
         <TabLink to="/vehicles" labelKey="nav.vehicles" icon="🚙" />

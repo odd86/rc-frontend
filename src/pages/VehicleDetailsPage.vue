@@ -1,6 +1,6 @@
 <template>
   <MobileShell>
-    <div class="px-4 pt-4 space-y-4">
+    <div class="ds-page">
       <div v-if="!vehicle" class="text-sm text-slate-600">⏳ {{ t("auth.working") }}</div>
 
       <FunCard
