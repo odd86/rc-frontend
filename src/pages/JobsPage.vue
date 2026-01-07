@@ -14,7 +14,7 @@
 
             <div class="flex items-center gap-2">
               <button
-                class="rounded-2xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                class="ds-btn ds-btn-sm ds-btn-secondary"
                 :disabled="jobsStore.loadingPending || jobsStore.loadingActive"
                 @click="refresh"
                 type="button"
@@ -28,7 +28,7 @@
           <!-- Segmented tabs -->
           <div class="mt-3 grid grid-cols-2 gap-2">
             <button
-              class="rounded-2xl border px-3 py-2 text-sm font-semibold"
+              class="ds-btn ds-btn-md border"
               :class="tab === 'active' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 hover:bg-slate-50'"
               @click="tab = 'active'"
               type="button"
@@ -40,7 +40,7 @@
             </button>
 
             <button
-              class="rounded-2xl border px-3 py-2 text-sm font-semibold"
+              class="ds-btn ds-btn-md border"
               :class="tab === 'pending' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 hover:bg-slate-50'"
               @click="tab = 'pending'"
               type="button"
@@ -58,14 +58,14 @@
               <div class="text-xs font-semibold text-slate-700">🎛️ {{ t("jobs.filtersTitle") }}</div>
               <div class="flex items-center gap-2">
                 <button
-                  class="rounded-2xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                  class="ds-btn ds-btn-sm ds-btn-secondary"
                   @click="clearFilters"
                   type="button"
                 >
                   👀 Alle
                 </button>
                 <button
-                  class="rounded-2xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                  class="ds-btn ds-btn-sm ds-btn-secondary"
                   @click="resetFiltersToGarage"
                   type="button"
                 >
@@ -79,8 +79,8 @@
               <button
                 v-for="vt in garageVehicleTypes"
                 :key="vt"
-                class="shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold"
-                :class="selectedTypes.has(vt) ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 hover:bg-slate-50'"
+                class="ds-chip shrink-0"
+                :class="selectedTypes.has(vt) ? 'ds-chip-on' : 'ds-chip-off'"
                 @click="toggleType(vt)"
                 type="button"
               >
@@ -96,20 +96,20 @@
           </div>
 
           <!-- Errors consolidated -->
-          <div v-if="jobsStore.errorActive || jobsStore.errorPending" class="mt-3 rounded-2xl border bg-red-50 px-3 py-2 text-sm text-red-700">
+          <div v-if="jobsStore.errorActive || jobsStore.errorPending" class="mt-3 ds-alert-error">
             <div class="font-semibold">⚠️ Noe gikk galt</div>
             <div v-if="jobsStore.errorActive" class="mt-1">{{ jobsStore.errorActive }}</div>
             <div v-if="jobsStore.errorPending" class="mt-1">{{ jobsStore.errorPending }}</div>
           </div>
 
           <!-- Success feedback -->
-          <div v-if="jobsStore.completeSuccess || jobsStore.takeSuccess" class="mt-3 rounded-2xl border bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+          <div v-if="jobsStore.completeSuccess || jobsStore.takeSuccess" class="mt-3 ds-alert-ok">
             <div class="font-semibold">✅ Ferdig</div>
             <div v-if="jobsStore.completeSuccess" class="mt-1">{{ t("jobs.completeOk") }}</div>
             <div v-if="jobsStore.takeSuccess" class="mt-1">{{ t("jobs.takeOk") }}</div>
           </div>
 
-          <div v-if="jobsStore.completeError || jobsStore.takeError" class="mt-3 rounded-2xl border bg-red-50 px-3 py-2 text-sm text-red-700">
+          <div v-if="jobsStore.completeError || jobsStore.takeError" class="mt-3 ds-alert-error">
             <div class="font-semibold">❌ Klarte ikke</div>
             <div v-if="jobsStore.completeError" class="mt-1">{{ jobsStore.completeError }}</div>
             <div v-if="jobsStore.takeError" class="mt-1">{{ jobsStore.takeError }}</div>
@@ -123,7 +123,7 @@
         <div v-if="tab === 'active'">
           <div v-if="jobsStore.loadingActive" class="text-sm text-slate-600">⏳ {{ t("auth.working") }}</div>
 
-          <div v-else-if="jobsStore.active.length === 0" class="rounded-2xl border bg-white px-4 py-4 text-sm text-slate-700">
+          <div v-else-if="jobsStore.active.length === 0" class="ds-surface px-4 py-4 text-sm text-slate-700">
             <div class="font-semibold">🧘 {{ t("jobs.activeEmpty") }}</div>
             <div class="mt-1 text-xs text-slate-600">Ta en jobb fra «{{ t("jobs.pendingTitle") }}» når du er klar.</div>
           </div>
@@ -132,7 +132,7 @@
             <div
               v-for="aj in jobsStore.active"
               :key="aj.job_id"
-              class="rounded-2xl border bg-white px-3 py-3"
+              class="ds-card"
             >
               <div class="flex items-start justify-between gap-3">
                 <div class="min-w-0 flex-1">
@@ -144,25 +144,25 @@
                   </div>
 
                   <div class="mt-2 flex flex-wrap gap-2 text-[11px]">
-                    <span class="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">
+                    <span class="ds-badge-muted">
                       🚜 {{ t("jobs.vehicle") }}:
                       {{ vehiclesStore.vehicles.find(v => v.vehicle_id === aj.vehicle_id)?.name || t("jobs.unknownVehicle") }}
                     </span>
 
-                    <span v-if="aj.job_units" class="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">
+                    <span v-if="aj.job_units" class="ds-badge-muted">
                       <span v-if="aj.job_units === 'distance'">🛣️ {{ aj.unit_amount }} km</span>
                       <span v-else-if="aj.job_units === 'time'">⏱️ {{ aj.unit_amount }} timer</span>
                       <span v-else>📦 {{ aj.unit_amount }}</span>
                     </span>
 
-                    <span v-if="typeof aj.reward_amount === 'number'" class="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">
+                    <span v-if="typeof aj.reward_amount === 'number'" class="ds-badge-muted">
                       💰 {{ t("jobs.reward") }} {{ aj.reward_amount }}
                     </span>
                   </div>
                 </div>
 
                 <button
-                  class="shrink-0 rounded-2xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
+                  class="ds-btn ds-btn-md ds-btn-primary shrink-0"
                   :disabled="jobsStore.completingVehicleId === aj.vehicle_id"
                   @click="complete(aj.vehicle_id)"
                   type="button"
@@ -178,7 +178,7 @@
         <div v-else>
           <div v-if="jobsStore.loadingPending" class="text-sm text-slate-600">⏳ {{ t("auth.working") }}</div>
 
-          <div v-else-if="filteredPending.length === 0" class="rounded-2xl border bg-white px-4 py-4 text-sm text-slate-700">
+          <div v-else-if="filteredPending.length === 0" class="ds-surface px-4 py-4 text-sm text-slate-700">
             <div class="font-semibold">🫥 {{ t("jobs.empty") }}</div>
             <div class="mt-1 text-xs text-slate-600">
               Ingen jobber matcher filteret. Trykk «👀 Alle» for å se alt.
@@ -189,7 +189,7 @@
             <div
               v-for="job in filteredPending"
               :key="job.job_id"
-              class="rounded-2xl border bg-white px-3 py-3"
+              class="ds-card"
             >
               <div class="flex items-start justify-between gap-3">
                 <div class="min-w-0 flex-1">
@@ -197,13 +197,13 @@
                   <div class="mt-1 text-xs text-slate-600">{{ job.description }}</div>
 
                   <div class="mt-2 flex flex-wrap gap-2 text-[11px]">
-                    <span v-if="job.job_units" class="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">
+                    <span v-if="job.job_units" class="ds-badge-muted">
                       <span v-if="job.job_units === 'distance'">🛣️ {{ job.unit_amount }} km</span>
                       <span v-else-if="job.job_units === 'time'">⏱️ {{ job.unit_amount }} timer</span>
                       <span v-else>📦 {{ job.unit_amount }}</span>
                     </span>
 
-                    <span v-if="typeof job.reward_amount === 'number'" class="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">
+                    <span v-if="typeof job.reward_amount === 'number'" class="ds-badge-muted">
                       💰 {{ t("jobs.reward") }} {{ job.reward_amount }}
                     </span>
                   </div>
@@ -217,7 +217,7 @@
                 </div>
 
                 <button
-                  class="shrink-0 rounded-2xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
+                  class="ds-btn ds-btn-md ds-btn-primary shrink-0"
                   :disabled="jobsStore.taking"
                   @click="openTake(job.batch_id, job.allowed_vehicle_types, job)"
                   type="button"
@@ -244,7 +244,7 @@
             <div class="truncate text-lg font-semibold text-slate-900">{{ t("jobs.pickVehicleTitle") }}</div>
           </div>
           <button
-            class="rounded-2xl border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            class="ds-btn ds-btn-md ds-btn-secondary"
             @click="closePicker"
             type="button"
           >
@@ -258,15 +258,15 @@
           <div class="mt-1 text-xs text-slate-600">{{ pendingJob.description }}</div>
 
           <div class="mt-2 flex flex-wrap gap-2 text-[11px]">
-            <span v-if="pendingJob.job_units" class="rounded-full bg-white border px-2 py-1 font-semibold text-slate-700">
+            <span v-if="pendingJob.job_units" class="ds-badge-outline">
               <span v-if="pendingJob.job_units === 'distance'">🛣️ {{ pendingJob.unit_amount }} km</span>
               <span v-else-if="pendingJob.job_units === 'time'">⏱️ {{ pendingJob.unit_amount }} timer</span>
               <span v-else>📦 {{ pendingJob.unit_amount }}</span>
             </span>
-            <span v-if="typeof pendingJob.reward_amount === 'number'" class="rounded-full bg-white border px-2 py-1 font-semibold text-slate-700">
+            <span v-if="typeof pendingJob.reward_amount === 'number'" class="ds-badge-outline">
               💰 {{ t("jobs.reward") }} {{ pendingJob.reward_amount }}
             </span>
-            <span class="rounded-full bg-white border px-2 py-1 font-semibold text-slate-700">
+            <span class="ds-badge-outline">
               🚜 {{ t("jobs.allowed") }}: {{ pendingJob.allowed_vehicle_types.map(v => t(`vehicles.vehicleTypes.${v}`)).join(", ") }}
             </span>
           </div>
