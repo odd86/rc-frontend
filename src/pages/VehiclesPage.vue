@@ -1,6 +1,6 @@
 <template>
   <MobileShell>
-    <div class="px-4 pt-4 space-y-4">
+    <div class="ds-page">
       <FunCard
           :eyebrow="t('vehicles.titleEyebrow')"
           :subtitle="t('vehicles.subtitle')"
@@ -14,7 +14,7 @@
               class="group block"
           >
             <div
-                class="rounded-2xl border bg-white px-3 py-3 active:scale-[0.99] transition"
+                class="ds-card active:scale-[0.99] transition"
             >
               <div class="flex items-center gap-3">
                 <!-- Icon + status ring -->
@@ -73,7 +73,7 @@
 
                     <div
                         v-if="openMenuId === vehicle.id"
-                        class="absolute right-0 mt-2 w-44 rounded-2xl border bg-white shadow-lg overflow-hidden z-20"
+                        class="absolute right-0 mt-2 w-44 ds-surface shadow-lg overflow-hidden z-20"
                         @click.prevent
                     >
                       <button
@@ -118,7 +118,7 @@
 
         <RouterLink
             to="/vehicles/add"
-            class="mt-3 block w-full rounded-2xl border border-dashed bg-white px-4 py-4 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            class="mt-3 block w-full ds-surface border-dashed px-4 py-4 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50"
         >
           {{ t("vehicles.addVehicle") }}
         </RouterLink>
