@@ -1,6 +1,6 @@
 <template>
   <MobileShell>
-    <div class="px-4 pt-4 space-y-4">
+    <div class="ds-page">
       <FunCard
         :eyebrow="t('scoreboard.titleEyebrow')"
         :title="t('scoreboard.title')"
