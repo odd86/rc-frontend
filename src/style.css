@@ -1,65 +1,88 @@
 @import "tailwindcss";
 
-/* Layout helpers */
-/*.ds-page {*/
-/*    @apply px-4 pt-4 space-y-4;*/
-/*}*/
+@layer base {
+  :root {
+    color-scheme: light;
+    --ds-bg: #f5f7fa;
+    --ds-surface: #ffffff;
+    --ds-primary: #101828;
+    --ds-primary-soft: #eef2ff;
+    --ds-accent: #22c55e;
+    --ds-warning: #f59e0b;
+    --ds-danger: #ef4444;
+    --ds-text: #111827;
+    --ds-text-muted: #475467;
+    --ds-border: #e4e7ec;
+    --ds-radius-sm: 12px;
+    --ds-radius-md: 16px;
+    --ds-radius-lg: 24px;
+    --ds-shadow-1: 0 1px 2px rgba(16, 24, 40, 0.08);
+    --ds-shadow-2: 0 8px 24px rgba(16, 24, 40, 0.1);
+    --ds-shadow-3: 0 16px 40px rgba(16, 24, 40, 0.12);
+    --ds-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
 
-/*!* Surfaces *!*/
-/*.ds-card {*/
-/*    @apply rounded-3xl border bg-white p-4 shadow-sm;*/
-/*}*/
-
-/*!* Buttons *!*/
-/*.ds-btn {*/
-/*    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition;*/
-/*}*/
-
-/*.ds-btn-primary {*/
-/*    @apply ds-btn bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-50;*/
-/*}*/
-
-/*.ds-btn-secondary {*/
-/*    @apply ds-btn bg-slate-100 text-slate-800 hover:bg-slate-200 disabled:opacity-50;*/
-/*}*/
-
-/*.ds-btn-ghost {*/
-/*    @apply ds-btn border bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50;*/
-/*}*/
-
-/*.ds-btn-danger {*/
-/*    @apply ds-btn bg-red-50 text-red-700 hover:bg-red-100 disabled:opacity-50;*/
-/*}*/
-
-/*!* Small pills/chips *!*/
-/*.ds-chip {*/
-/*    @apply inline-flex items-center gap-1 rounded-full border bg-white px-3 py-1.5 text-xs font-semibold text-slate-700;*/
-/*}*/
-
-/*.ds-chip-on {*/
-/*    @apply bg-slate-900 text-white border-slate-900;*/
-/*}*/
-
-/*!* Alerts *!*/
-/*.ds-alert {*/
-/*    @apply rounded-2xl border px-3 py-2 text-sm;*/
-/*}*/
-
-/*.ds-alert-error {*/
-/*    @apply ds-alert bg-red-50 text-red-700;*/
-/*}*/
-
-/*.ds-alert-ok {*/
-/*    @apply ds-alert bg-emerald-50 text-emerald-800;*/
-/*}*/
-
-html, body, #app {
+  html,
+  body,
+  #app {
     width: 100%;
     height: 100%;
     overflow-x: hidden;
-}
+  }
 
-#app {
+  body {
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    background: var(--ds-bg);
+    color: var(--ds-text);
+  }
+
+  #app {
     height: 100%;
     overflow: hidden;
+  }
+}
+
+@layer components {
+  .ds-page {
+    @apply px-4 pt-4 pb-6 space-y-4;
+  }
+
+  .ds-card {
+    @apply border border-slate-200 bg-white/90 backdrop-blur;
+    border-radius: var(--ds-radius-lg);
+    box-shadow: var(--ds-shadow-1);
+  }
+
+  .ds-card-strong {
+    box-shadow: var(--ds-shadow-2);
+  }
+
+  .ds-input {
+    @apply w-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400;
+    border-radius: var(--ds-radius-md);
+    transition: border-color 160ms var(--ds-ease), box-shadow 160ms var(--ds-ease);
+  }
+
+  .ds-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  }
+
+  .ds-chip {
+    @apply inline-flex items-center gap-1 border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700;
+    border-radius: 999px;
+  }
+
+  .ds-divider {
+    @apply h-px w-full bg-slate-200;
+  }
+
+  .ds-elevated {
+    box-shadow: var(--ds-shadow-2);
+  }
+
+  .ds-section-title {
+    @apply text-sm font-semibold text-slate-700;
+  }
 }
