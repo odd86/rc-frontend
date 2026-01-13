@@ -1,35 +1,27 @@
 <template>
   <AdminShell>
     <div class="space-y-4">
-      <div class="flex items-center justify-between rounded-3xl border bg-white p-4">
-        <div>
-          <div class="text-xs font-semibold text-slate-500">{{ t("admin.jobs.listEyebrow") }}</div>
-          <div class="mt-1 text-lg font-semibold text-slate-900">{{ t("admin.jobs.listTitle") }}</div>
-          <div class="mt-1 text-sm text-slate-600">{{ t("admin.jobs.listSubtitle") }}</div>
+      <Card>
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <div class="text-xs font-semibold text-slate-500">{{ t("admin.jobs.listEyebrow") }}</div>
+            <div class="mt-1 text-lg font-semibold text-slate-900">{{ t("admin.jobs.listTitle") }}</div>
+            <div class="mt-1 text-sm text-slate-600">{{ t("admin.jobs.listSubtitle") }}</div>
+          </div>
+
+          <div class="flex gap-2">
+            <SecondaryButton :disabled="loadingList" @click="refresh" type="button">
+              {{ t("admin.actions.refresh") }}
+            </SecondaryButton>
+
+            <PrimaryButton @click="showCreate = !showCreate" type="button">
+              {{ t("admin.jobs.addJob") }}
+            </PrimaryButton>
+          </div>
         </div>
+      </Card>
 
-        <div class="flex gap-2">
-          <button
-              class="rounded-2xl border bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-              :disabled="loadingList"
-              @click="refresh"
-              type="button"
-          >
-            {{ t("admin.actions.refresh") }}
-          </button>
-
-          <button
-              class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
-              @click="showCreate = !showCreate"
-              type="button"
-          >
-            {{ t("admin.jobs.addJob") }}
-          </button>
-        </div>
-      </div>
-
-      <!-- Create form -->
-      <div v-if="showCreate" class="rounded-3xl border bg-white p-5">
+      <Card v-if="showCreate">
         <div class="flex items-start justify-between gap-3">
           <div>
             <div class="text-xs font-semibold text-slate-500">{{ t("admin.jobs.createEyebrow") }}</div>
@@ -37,82 +29,78 @@
             <div class="mt-1 text-sm text-slate-600">{{ t("admin.jobs.createSubtitle") }}</div>
           </div>
 
-          <button
-              class="rounded-2xl border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-              @click="showCreate = false"
-              type="button"
-          >
+          <SecondaryButton size="sm" @click="showCreate = false" type="button">
             {{ t("admin.actions.close") }}
-          </button>
+          </SecondaryButton>
         </div>
 
         <form class="mt-4 space-y-3" @submit.prevent="create">
-          <div>
-            <label class="text-sm font-semibold text-slate-700">{{ t("admin.jobs.fields.title") }}</label>
-            <input v-model="form.title" class="mt-1 w-full rounded-2xl border px-3 py-2" maxlength="24" />
-          </div>
-
-          <div>
-            <label class="text-sm font-semibold text-slate-700">{{ t("admin.jobs.fields.description") }}</label>
-            <input v-model="form.description" class="mt-1 w-full rounded-2xl border px-3 py-2" maxlength="48" />
-          </div>
+          <TextInput v-model="form.title" :label="t('admin.jobs.fields.title')" placeholder="Job title" />
+          <TextInput v-model="form.description" :label="t('admin.jobs.fields.description')" placeholder="Short description" />
 
           <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="text-sm font-semibold text-slate-700">{{ t("admin.jobs.fields.jobUnits") }}</label>
-              <select v-model="form.job_units" class="mt-1 w-full rounded-2xl border bg-white px-3 py-2">
-                <option value="distance">{{ t("admin.jobs.units.distance") }}</option>
-                <option value="time">{{ t("admin.jobs.units.time") }}</option>
-              </select>
-            </div>
+            <Select v-model="form.job_units" :label="t('admin.jobs.fields.jobUnits')">
+              <option value="distance">{{ t("admin.jobs.units.distance") }}</option>
+              <option value="time">{{ t("admin.jobs.units.time") }}</option>
+            </Select>
 
             <div>
               <label class="text-sm font-semibold text-slate-700">{{ t("admin.jobs.fields.unitAmount") }}</label>
-              <input v-model.number="form.unit_amount" type="number" class="mt-1 w-full rounded-2xl border px-3 py-2" min="1" />
+              <input
+                v-model.number="form.unit_amount"
+                type="number"
+                class="ds-input"
+                min="1"
+              />
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="text-sm font-semibold text-slate-700">{{ t("admin.jobs.fields.rewardAmount") }}</label>
-              <input v-model.number="form.reward_amount" type="number" class="mt-1 w-full rounded-2xl border px-3 py-2" min="0" />
+              <input
+                v-model.number="form.reward_amount"
+                type="number"
+                class="ds-input"
+                min="0"
+              />
             </div>
 
             <div>
               <label class="text-sm font-semibold text-slate-700">{{ t("admin.jobs.fields.quantity") }}</label>
-              <input v-model.number="form.job_quantity" type="number" class="mt-1 w-full rounded-2xl border px-3 py-2" min="1" />
+              <input
+                v-model.number="form.job_quantity"
+                type="number"
+                class="ds-input"
+                min="1"
+              />
             </div>
           </div>
 
           <div>
             <label class="text-sm font-semibold text-slate-700">{{ t("admin.jobs.fields.allowedVehicleTypes") }}</label>
             <div class="mt-2 grid grid-cols-2 gap-2 md:grid-cols-3">
-              <label
-                  v-for="vt in vehicleTypes"
-                  :key="vt"
-                  class="flex cursor-pointer items-center gap-2 rounded-2xl border bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
-              >
-                <input type="checkbox" :value="vt" v-model="form.allowed_vehicle_types" />
-                <span class="truncate">{{ t(`vehicles.vehicleTypes.${vt}`) }}</span>
-              </label>
+              <Checkbox
+                v-for="vt in vehicleTypes"
+                :key="vt"
+                :label="t(`vehicles.vehicleTypes.${vt}`)"
+                :model-value="form.allowed_vehicle_types.includes(vt)"
+                @update:model-value="toggleVehicleType(vt, $event)"
+              />
             </div>
           </div>
 
-          <button
-              class="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
-              :disabled="creating || !isValid"
-          >
+          <PrimaryButton class="w-full" :disabled="creating || !isValid" type="submit">
             {{ creating ? t("auth.working") : t("admin.jobs.actions.create") }}
-          </button>
+          </PrimaryButton>
 
           <p v-if="createError" class="text-sm text-red-600">{{ createError }}</p>
           <p v-if="createSuccess" class="text-sm text-emerald-700">{{ createSuccess }}</p>
         </form>
-      </div>
+      </Card>
 
-      <!-- List -->
-      <div class="rounded-3xl border bg-white">
-        <div class="flex items-center justify-between px-4 py-3">
+      <Card>
+        <div class="flex items-center justify-between px-1 pb-2">
           <div class="text-sm font-semibold text-slate-900">{{ t("admin.jobs.pending") }}</div>
           <div class="text-xs text-slate-600">
             <span v-if="loadingList">{{ t("auth.working") }}</span>
@@ -120,56 +108,45 @@
           </div>
         </div>
 
-        <div v-if="listError" class="px-4 pb-3 text-sm text-red-600">{{ listError }}</div>
+        <div v-if="listError" class="px-1 pb-3 text-sm text-red-600">{{ listError }}</div>
 
-        <div v-if="!loadingList && rows.length === 0" class="px-4 pb-4">
-          <div class="rounded-2xl border border-dashed p-4 text-sm text-slate-600">
-            {{ t("admin.jobs.empty") }}
-          </div>
-        </div>
+        <EmptyState v-if="!loadingList && rows.length === 0" :title="t('admin.jobs.empty')" />
 
         <div v-else class="divide-y">
           <template v-for="row in rows" :key="row.key">
-            <!-- Batch header -->
-            <div v-if="row.kind === 'batch'" class="bg-slate-50 px-4 py-3">
-              <div class="flex items-center justify-between">
+            <div v-if="row.kind === 'batch'" class="bg-slate-50 px-2 py-3">
+              <div class="flex items-center justify-between gap-2">
                 <div class="min-w-0 flex-grow">
                   <div class="truncate text-sm font-semibold text-slate-900">
                     {{ row.count }} - {{ row.title || t("admin.jobs.unknownTitle") }}
                   </div>
-                  <div v-if="row.description" class="mt-1 text-xs text-slate-600 truncate">
+                  <div v-if="row.description" class="mt-1 truncate text-xs text-slate-600">
                     {{ row.description }}
                   </div>
-                  <div v-if="row.reward_amount" class="mt-1 text-xs text-slate-600 truncate">
-                    💰 {{ row.reward_amount }}
-                </div>
+                  <div v-if="row.reward_amount" class="mt-1 truncate text-xs text-slate-600">
+                    {{ row.reward_amount }}
+                  </div>
                 </div>
 
-                <button
-                    class="rounded-xl mr-2 border bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-                    @click="toggleBatch(row.batch_id)"
-                    type="button"
-                >
+                <SecondaryButton size="sm" @click="toggleBatch(row.batch_id)" type="button">
                   {{ expandedBatches.has(row.batch_id) ? t("admin.jobs.collapse") : t("admin.jobs.expand") }}
-                </button>
-                <button
-                    class="rounded-xl border bg-white px-3 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-50 disabled:opacity-50"
-                    :disabled="deletingBatchId === row.batch_id"
-                    @click="deleteBatch(row.batch_id)"
-                    type="button"
-                    :title="t('admin.jobs.actions.deleteBatch')"
+                </SecondaryButton>
+                <DestructiveButton
+                  size="sm"
+                  :disabled="deletingBatchId === row.batch_id"
+                  @click="deleteBatch(row.batch_id)"
+                  type="button"
                 >
-                  🗑️
-                </button>
+                  {{ t("admin.jobs.actions.deleteBatch") }}
+                </DestructiveButton>
               </div>
             </div>
 
-            <!-- Job row -->
             <div
-                v-else
-                class="px-4 py-3"
-                :class="row.batch_id ? 'pl-8' : ''"
-                v-show="row.batch_id ? expandedBatches.has(row.batch_id) : true"
+              v-else
+              class="px-2 py-3"
+              :class="row.batch_id ? 'pl-6' : ''"
+              v-show="row.batch_id ? expandedBatches.has(row.batch_id) : true"
             >
               <div class="flex items-start justify-between gap-3">
                 <div class="min-w-0">
@@ -181,62 +158,92 @@
                   </div>
 
                   <div class="mt-2 flex flex-wrap gap-2 text-[11px]">
-                    <span class="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">
-                      id: {{ row.job_id }}
-                    </span>
-                    <span v-if="row.job_units" class="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">
-                      {{ row.job_units }}
-                    </span>
-                    <span v-if="typeof row.unit_amount === 'number'" class="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">
+                    <Badge>id: {{ row.job_id }}</Badge>
+                    <Badge v-if="row.job_units">{{ row.job_units }}</Badge>
+                    <Badge v-if="typeof row.unit_amount === 'number'">
                       {{ t("admin.jobs.unitsAmount") }} {{ row.unit_amount }}
-                    </span>
-                    <span v-if="typeof row.reward_amount === 'number'" class="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">
+                    </Badge>
+                    <Badge v-if="typeof row.reward_amount === 'number'">
                       {{ t("admin.jobs.reward") }} {{ row.reward_amount }}
-                    </span>
+                    </Badge>
                   </div>
                 </div>
 
-                <button
-                    class="rounded-2xl border bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 disabled:opacity-50"
-                    :disabled="deletingJobId === row.job_id"
-                    @click="deleteJob(row.job_id)"
-                    type="button"
-                    :title="t('admin.jobs.actions.deleteJob')"
+                <DestructiveButton
+                  size="sm"
+                  :disabled="deletingJobId === row.job_id"
+                  @click="deleteJob(row.job_id)"
+                  type="button"
                 >
-                  🗑️
-                </button>
+                  {{ t("admin.jobs.actions.deleteJob") }}
+                </DestructiveButton>
               </div>
             </div>
           </template>
         </div>
 
-        <div v-if="deleteError" class="px-4 py-3 text-sm text-red-600">{{ deleteError }}</div>
-        <div v-if="deleteSuccess" class="px-4 py-3 text-sm text-emerald-700">{{ deleteSuccess }}</div>
-      </div>
+        <div v-if="deleteError" class="px-1 py-3 text-sm text-red-600">{{ deleteError }}</div>
+        <div v-if="deleteSuccess" class="px-1 py-3 text-sm text-emerald-700">{{ deleteSuccess }}</div>
+      </Card>
     </div>
   </AdminShell>
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue"
-import {useI18n} from "vue-i18n"
+import { computed, onMounted, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import AdminShell from "@/components/AdminShell.vue"
+import Card from "@/components/ui/Card.vue"
+import PrimaryButton from "@/components/ui/PrimaryButton.vue"
+import SecondaryButton from "@/components/ui/SecondaryButton.vue"
+import DestructiveButton from "@/components/ui/DestructiveButton.vue"
+import TextInput from "@/components/ui/TextInput.vue"
+import Select from "@/components/ui/Select.vue"
+import Checkbox from "@/components/ui/Checkbox.vue"
+import EmptyState from "@/components/ui/EmptyState.vue"
+import Badge from "@/components/ui/Badge.vue"
 
-import type {AdminPendingJob, JobsRequestModel, VehicleType} from "@/types/api"
-import {adminCreateJobs, adminDeleteJob, adminDeleteJobs, adminGetAllPendingJobs} from "@/api/endpoints"
+import type { AdminPendingJob, JobsRequestModel, VehicleType } from "@/types/api"
+import { adminCreateJobs, adminDeleteJob, adminDeleteJobs, adminGetAllPendingJobs } from "@/api/endpoints"
 
 const { t } = useI18n()
 
 const vehicleTypes: VehicleType[] = [
-  "excavator","backhoe","bulldozer","wheel_loader","skid_steer","dump_truck","articulated_dump_truck",
-  "semi_truck","tractor_truck","trailer","forklift","telehandler","crane","tower_crane","knuckle_boom_crane",
-  "grader","roller","asphalt_paver","compactor","tractor","agricultural_implement","service_truck","fuel_truck",
-  "water_truck","tow_truck","maintenance_vehicle","demolition_machine","drill_rig","conveyor","rock_crusher","specialty",
+  "excavator",
+  "backhoe",
+  "bulldozer",
+  "wheel_loader",
+  "skid_steer",
+  "dump_truck",
+  "articulated_dump_truck",
+  "semi_truck",
+  "tractor_truck",
+  "trailer",
+  "forklift",
+  "telehandler",
+  "crane",
+  "tower_crane",
+  "knuckle_boom_crane",
+  "grader",
+  "roller",
+  "asphalt_paver",
+  "compactor",
+  "tractor",
+  "agricultural_implement",
+  "service_truck",
+  "fuel_truck",
+  "water_truck",
+  "tow_truck",
+  "maintenance_vehicle",
+  "demolition_machine",
+  "drill_rig",
+  "conveyor",
+  "rock_crusher",
+  "specialty",
 ]
 
 const showCreate = ref(false)
 
-// List state
 const jobs = ref<AdminPendingJob[]>([])
 const loadingList = ref(false)
 const listError = ref("")
@@ -257,11 +264,6 @@ async function refresh() {
     const data = await adminGetAllPendingJobs()
     jobs.value = Array.isArray(data) ? data : []
 
-    const batchIds = new Set(
-        jobs.value
-            .map((j) => (j.batch_id || "").trim())
-            .filter((x) => x.length > 0)
-    )
     expandedBatches.value = new Set(expandedBatches.value)
   } catch (e: any) {
     listError.value = e?.response?.data?.detail || e?.message || t("auth.errorGeneric")
@@ -274,7 +276,6 @@ onMounted(async () => {
   await refresh()
 })
 
-// Create
 const creating = ref(false)
 const createError = ref("")
 const createSuccess = ref("")
@@ -291,12 +292,19 @@ const form = ref<JobsRequestModel>({
 
 const isValid = computed(() => {
   return (
-      form.value.title.trim().length >= 3 &&
-      form.value.unit_amount > 0 &&
-      form.value.reward_amount >= 0 &&
-      form.value.allowed_vehicle_types.length > 0
+    form.value.title.trim().length >= 3 &&
+    form.value.unit_amount > 0 &&
+    form.value.reward_amount >= 0 &&
+    form.value.allowed_vehicle_types.length > 0
   )
 })
+
+function toggleVehicleType(vt: VehicleType, enabled: boolean) {
+  const set = new Set(form.value.allowed_vehicle_types)
+  if (enabled) set.add(vt)
+  else set.delete(vt)
+  form.value.allowed_vehicle_types = Array.from(set)
+}
 
 async function create() {
   creating.value = true
@@ -321,7 +329,6 @@ async function create() {
   }
 }
 
-// Delete job by job_id
 const deletingJobId = ref("")
 const deleteError = ref("")
 const deleteSuccess = ref("")
@@ -358,7 +365,6 @@ async function deleteBatch(batchId: string) {
 }
 
 
-// Build list rows
 type BatchRow = {
   kind: "batch"
   key: string
@@ -377,6 +383,10 @@ type JobRow = {
   job_id: string
   batch_id?: string
   title?: string
+  description?: string
+  job_units?: "distance" | "time"
+  unit_amount?: number
+  reward_amount?: number
 }
 
 const rows = computed<(BatchRow | JobRow)[]>(() => {
@@ -396,11 +406,10 @@ const rows = computed<(BatchRow | JobRow)[]>(() => {
 
   const out: (BatchRow | JobRow)[] = []
 
-  // Unbatched jobs first
   for (const j of unbatched) {
     out.push({
       kind: "job",
-      key: `job_${j.job_id}`,
+      key: j.job_id,
       job_id: j.job_id,
       title: j.title,
       description: j.description,
@@ -410,35 +419,35 @@ const rows = computed<(BatchRow | JobRow)[]>(() => {
     })
   }
 
-  // Batches
-  const batchIds = Array.from(byBatch.keys()).sort()
-  for (const id of batchIds) {
-    const list = byBatch.get(id) || []
-    const head = list[0]
-
+  for (const [batchId, items] of byBatch.entries()) {
+    const first = items[0]
     out.push({
       kind: "batch",
-      key: `batch_${id}`,
-      batch_id: id,
-      count: list.length,
-      title: head?.title,
-      description: head?.description,
-      job_units: head?.job_units,
-      unit_amount: head?.unit_amount,
-      reward_amount: head?.reward_amount,
+      key: batchId,
+      batch_id: batchId,
+      count: items.length,
+      title: first?.title,
+      description: first?.description,
+      job_units: first?.job_units,
+      unit_amount: first?.unit_amount,
+      reward_amount: first?.reward_amount,
     })
 
-    const sorted = [...list].sort((a, b) => a.job_id.localeCompare(b.job_id))
-    for (const j of sorted) {
+    for (const j of items) {
       out.push({
         kind: "job",
-        key: `job_${j.job_id}`,
+        key: j.job_id,
         job_id: j.job_id,
-        batch_id: id,
+        batch_id: batchId,
         title: j.title,
+        description: j.description,
+        job_units: j.job_units,
+        unit_amount: j.unit_amount,
+        reward_amount: j.reward_amount,
       })
     }
   }
+
   return out
 })
 </script>

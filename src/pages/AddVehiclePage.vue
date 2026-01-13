@@ -1,49 +1,36 @@
 <template>
   <MobileShell>
-    <div class="px-4 pt-4 space-y-4">
-      <FunCard
-          :eyebrow="t('vehicles.add.titleEyebrow')"
-          :title="t('vehicles.add.title')"
-          :subtitle="t('vehicles.add.subtitle')"
-          badge="🚙"
+    <div class="ds-page">
+      <Card
+        :eyebrow="t('vehicles.add.titleEyebrow')"
+        :title="t('vehicles.add.title')"
+        :subtitle="t('vehicles.add.subtitle')"
+        badge="New"
       >
         <form class="space-y-4" @submit.prevent="submit">
-          <div>
-            <label class="text-sm font-semibold text-slate-700">{{ t("vehicles.add.vehicleType") }}</label>
-            <p class="mt-1 text-xs text-slate-500">{{ t("vehicles.add.hintType") }}</p>
-
-            <select
-                v-model="vehicleType"
-                class="mt-2 w-full rounded-2xl border bg-white px-3 py-3 text-sm"
-            >
-              <option v-for="opt in vehicleTypeOptions" :key="opt.value" :value="opt.value">
-                {{ opt.label }}
-              </option>
-            </select>
-          </div>
-
-          <button
-              class="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
-              :disabled="loading || !vehicleType"
-              type="submit"
+          <Select
+            v-model="vehicleType"
+            :label="t('vehicles.add.vehicleType')"
+            :hint="t('vehicles.add.hintType')"
           >
+            <option v-for="opt in vehicleTypeOptions" :key="opt.value" :value="opt.value">
+              {{ opt.label }}
+            </option>
+          </Select>
+
+          <PrimaryButton class="w-full" :disabled="loading || !vehicleType" type="submit">
             {{ loading ? t("auth.working") : t("vehicles.add.create") }}
-          </button>
+          </PrimaryButton>
 
           <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
         </form>
-      </FunCard>
+      </Card>
 
-      <FunCard
-          eyebrow="Tips"
-          title="Gøy det er lov"
-          subtitle="Velg noe som føles riktig"
-          badge="😄"
-      >
+      <Card eyebrow="Tips" title="Gøy det er lov" subtitle="Velg noe som føles riktig" badge="Guide">
         <div class="text-sm text-slate-700">
           Dette er bare en mal. Senere kan vi legge inn ikon, farge og stats per kjøretøytype.
         </div>
-      </FunCard>
+      </Card>
     </div>
   </MobileShell>
 </template>
@@ -54,7 +41,9 @@ import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 
 import MobileShell from "../components/MobileShell.vue"
-import FunCard from "../components/FunCard.vue"
+import Card from "@/components/ui/Card.vue"
+import Select from "@/components/ui/Select.vue"
+import PrimaryButton from "@/components/ui/PrimaryButton.vue"
 
 import { useVehiclesStore } from "../stores/vehicles"
 import type { VehicleType } from "../types/api"
@@ -118,7 +107,6 @@ async function submit() {
 
     await vehiclesStore.fetchVehicles()
 
-    // Etter create: gå til vehicles siden
     router.push("/vehicles")
   } catch (e: any) {
     error.value = e?.response?.data?.detail || e?.message || t("auth.errorGeneric")
